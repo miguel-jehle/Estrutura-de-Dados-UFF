@@ -1,6 +1,8 @@
-//Retorne todos os elementos de TAB em um vetor, ordenado, sem usar metodos de ordenação ou estruturas auxiliares.
-
-#include "TAB.c"
+/*
+Retornar uma lista entre dois numeros (M e N), de uma TAB, onde possui tais valores contidos da árvore. Sendo este vetor, ordenado, sem metodos de ordenacao disponiveis (nao pode usar, ou implementar o proprio).
+*/
+#include"TLSE.c"
+#include"TAB.c"
 
 TAB* insere(TAB* a, int x){
     if(!a){
@@ -15,42 +17,31 @@ TAB* insere(TAB* a, int x){
     return a;
 }
 
-int acha_menor(TAB*a, int* v,int *menor_ant, int menor_local){
-    if(!a) return __INT_MAX__;
-    menor_local = acha_menor(a->esq,v,menor_ant,menor_local);
-    menor_local = acha_menor(a->dir,v,menor_ant,menor_local);
-    if(a->info < menor_local && a->info > (*menor_ant)) return a->info;
-    return menor_local;
+TLSE* insere_ordenado(TLSE* l, int x){
+    if(!l || l->info > x) return TLSE_insere(l,x);
+    l->prox = insere_ordenado(l->prox,x);
+    return l;
 }
 
-void percorre(TAB* a, int* v, int n){
-    int menor = -1;
-    int menor_local;
-    for(int i = 0; i<n;i++){
-        menor_local = __INT_MAX__;
-        menor_local = acha_menor(a,v,&menor,menor_local); //Este menor é o menor local
-        menor = menor_local;
-        v[i] = menor_local;
-    }
-    return;
+TLSE* percorre(TAB*a, TLSE* l,int m, int n){
+    if(!a) return l;
+    l = percorre(a->esq,l,m,n);
+    if(a->info > m && a->info < n) l = insere_ordenado(l,a->info);
+    l = percorre(a->dir,l,m,n);
+    return l;
 }
 
-int tam(TAB* a){
-    if(!a) return 0;
-    return (tam(a->esq) + tam(a->dir) + 1);
-}
-
-int* TAB2vet_ord(TAB* a){
-    int n = tam(a);
-    int* v = (int*)malloc(sizeof(int)*n);
-    percorre(a,v,n);
-    return v;
+TLSE* lista_mn(TAB* a, int m, int n){
+    TLSE* l =  NULL;
+    l = percorre(a,l,m,n);
+    return l;
 }
 
 int main(void){
     //Para facilitar o meu processo de criação da árvore, colocarei ela numa lógica binaria de busca, pois o foco aqui é a verificação da função copia
-    int opcao, x,n;
+    int opcao, x,n,na,ma,t,m;
     TAB* raiz = NULL;
+    TLSE* lista = NULL;
     do{
         printf("\n\t0 - Sair\n\t1 - Inserir\n\t2 - Imprimir\n\t3 - Lista ordenada\n");
         printf("\n");
@@ -73,14 +64,16 @@ int main(void){
             break;
         
         case 3:
-            n = tam(raiz);
-            int * resp;
-            //int *resp = (int *) malloc(sizeof(int) * n);
-            resp = TAB2vet_ord(raiz);
-            printf("\n\tA lista ordenada com os elementos da arvore eh: \n");
-            for(int i = 0; i < n; i++) printf("Elemento %d: %d\n",i,resp[i]);
+            printf("\n\tDigite o valor do limite inferior: ");
+            scanf("%d", &ma);
             printf("\n");
-            free(resp);
+            printf("\n\tDigite o valor do limite superior: ");
+            scanf("%d", &na);
+            lista = lista_mn(raiz,ma,na);
+            printf("\n\tA lista dos valores maiores que m e menores que n eh: \n");
+            TLSE_imp_rec(lista);
+            printf("\n");
+            TLSE_lib_rec(lista);
             break;
 
         default:
@@ -93,3 +86,4 @@ int main(void){
     TAB_libera(raiz);
     return 0;
 }
+

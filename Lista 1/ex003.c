@@ -44,6 +44,13 @@ TAB* maior_in_arv(TAB *a){
     else return a;
 }
 
+TAB* maior_2(TAB*a){
+    if(!a) return NULL;
+    TAB* Esq, *Dir, *Aux;
+    Esq->info = 0;
+    Dir->info 
+}
+
 int main(void){
     //Para facilitar o meu processo de criação da árvore, colocarei ela numa lógica binaria de busca, pois o foco aqui é a verificação da função copia
     int opcao, x;

@@ -46,10 +46,10 @@ void TAB_imp_sim(TAB *a){
 void imp_aux(TAB *a, int andar){
   int j;
   if(a){
-    imp_aux(a->esq, andar + 1);
+    imp_aux(a->dir, andar + 1);
     for(j = 0; j <= andar; j++) printf("\t"); //printf("   ");
     printf("%d\n", a->info);
-    imp_aux(a->dir, andar + 1);
+    imp_aux(a->esq, andar + 1);
   }
   else{
    for(j = 0; j <= andar; j++) printf("\t");

@@ -1,31 +1,36 @@
-//Faça uma função que recebe uma TAB e retorna uma lista simplismente encadeada ordenada
+//Verifique se uma TABB é AVL, 1 caso sim e 0 caso não.
 
-#include"TAB.c"
-#include"TLSE.c"
+#include"TABB.c"
 
-TLSE* insere_ordenado(TLSE*l, int x){
-    if(!l || l->info > x) l = TLSE_insere(l,x);
-    if(l->info < x) l->prox = insere_ordenado(l->prox,x);
-    return l;
+int fb(TABB* a);
+int ver_AVL(TABB* a);
+int alt(TABB* a);
+int maior(int x, int y);
+
+int ver_AVL(TABB* a){
+    if(!a) return 1;
+    if((fb(a) > 1) || (fb(a) < -1)) return 0;
+    return (ver_AVL(a->esq) && ver_AVL(a->dir));
 }
 
-void percorre(TAB* a, TLSE **l){
-    if(!a) return; 
-    percorre(a->esq,l);
-    (*l) = insere_ordenado((*l),a->info);
-    percorre(a->dir,l);
+int fb(TABB* a){
+    if(!a) return 0;
+    return (alt(a->esq) - alt(a->dir));
 }
 
-TLSE* lista_ord(TAB *a){
-    if(!a) return NULL;
-    TLSE* resp = NULL;
-    percorre(a,&resp);
-    return resp;
+int alt(TABB* a){
+    if(!a) return -1;
+    return (maior(alt(a->esq),alt(a->dir)) + 1);
 }
 
-TAB* insere(TAB* a, int x){
+int maior(int x, int y){
+    if (x > y) return x;
+    return y;
+}
+
+TABB* insere(TABB* a, int x){
     if(!a){
-        TAB* novo = (TAB*)malloc(sizeof(TAB));
+        TABB* novo = (TABB*)malloc(sizeof(TABB));
         novo ->info = x;
         novo->esq = NULL;
         novo->dir = NULL;
@@ -39,10 +44,9 @@ TAB* insere(TAB* a, int x){
 int main(void){
     //Para facilitar o meu processo de criação da árvore, colocarei ela numa lógica binaria de busca, pois o foco aqui é a verificação da função copia
     int opcao, x;
-    TAB* raiz = NULL;
-    TLSE* lista = NULL;
+    TABB* raiz = NULL;
     do{
-        printf("\n\t0 - Sair\n\t1 - Inserir\n\t2 - Imprimir\n\t3 - Lista ordenada\n");
+        printf("\n\t0 - Sair\n\t1 - Inserir\n\t2 - Imprimir\n\t3 - Verificar se eh AVL\n");
         printf("\n");
         printf("\tDigite uma das opcoes acima: ");
         scanf("%d", &opcao);
@@ -59,15 +63,15 @@ int main(void){
         
         case 2:
             printf("\tA arvore eh: ");
-            TAB_imp_sim(raiz);
+            TABB_imp_sim(raiz);
             printf("\n");
             break;
         
         case 3:
-            lista = lista_ord(raiz);
-            printf("\n\tA lista ordenada com os elementos da arvore eh: ");
-            if(!lista) printf("se fudeu");
-            TLSE_imp_rec(lista);
+            x = ver_AVL(raiz);
+            if(!x) printf("\n\tNAO eh AVL");
+            else printf("\n\tEh AVL");
+            printf("\n");
             break;
 
         default:
@@ -77,7 +81,6 @@ int main(void){
     } while (opcao);
 
 
-    TAB_libera(raiz);
-    TLSE_libera(lista);
+    TABB_libera(raiz);
     return 0;
 }

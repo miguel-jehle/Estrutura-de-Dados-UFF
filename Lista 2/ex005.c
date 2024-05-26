@@ -16,53 +16,66 @@ typedef struct quadrado{
     int lado;
 }TQ;
 
-TABBG *TABBG_cria_quadrado(int lado){
-  TABBG *novo = (TABBG *) malloc(sizeof(TABBG));
-  novo->forma = (TQ*)malloc(sizeof(TQ));
-  novo->forma->lado = lado;
-  novo->area = lado*lado;
-  novo->id = QUADRADO;
-  novo->esq = NULL;
-  novo->dir = NULL;
-  (*(novo->forma))->lado = 2;
-  return novo;
-}
+typedef struct triangulo{
+  int base, altura;
+}TT;
+
+typedef struct retangulo{
+  int base, altura;
+}TR;
+
+typedef struct trapezio{
+  int base_menor, base_maior, altura;
+}TTP;
 
 TABBG *TABBG_inicializa(void){
   return NULL;
 }
-TABBG *TABBG_cria_triangulo(int base, int altura){
-  TABBG *novo = (TABBG *) malloc(sizeof(TABBG));
-  novo->base = base;
-  novo->altura = altura;
-  novo->area = (base*altura)/2;
-  novo->id = TRIANGULO;
-  novo->esq = NULL;
-  novo->dir = NULL;
+
+TQ* cria_quadrado(int lado){
+  TQ* novo = (TQ*)malloc(sizeof(TQ));
+  novo->lado = lado;
   return novo;
 }
 
-TABBG *TABBG_cria_retangulo(int base, int altura){
-  TABBG *novo = (TABBG *) malloc(sizeof(TABBG));
+TT* cria_triangulo(int base, int altura){
+  TT* novo = (TT*) malloc(sizeof(TT));
   novo->base = base;
   novo->altura = altura;
-  novo->area = (base*altura);
-  novo->id = RETANGULO;
-  novo->esq = NULL;
-  novo->dir = NULL;
   return novo;
 }
 
-TABBG *TABBG_cria_trapezio(int base,int Base, int altura){
-  TABBG *novo = (TABBG *) malloc(sizeof(TABBG));
+TR* cria_retangulo(int base, int altura){
+  TR* novo = (TR*) malloc(sizeof(TR));
   novo->base = base;
   novo->altura = altura;
-  novo->Base = Base;
-  novo->area = ((base+Base)*altura)/2;
-  novo->id = TRAPEZIO;
-  novo->esq = NULL;
-  novo->dir = NULL;
   return novo;
+}
+
+TTP* cria_trapezio(int base,int Base, int altura){
+  TTP* novo = (TTP*)malloc(sizeof(TTP));
+  novo->base_menor = base;
+  novo->altura = altura;
+  novo->base_maior = Base;
+  return novo;
+}
+
+TABBG* cria_no(int id){
+  TABBG* novo = (TABBG*)malloc(sizeof(TABBG));
+  if(id == QUADRADO){
+    int lado;
+    printf("Digite o lado do quadrado: ");
+    scanf("%d",&lado);
+    novo->forma = cria_quadrado(lado);
+    novo->area = lado*lado;
+  }
+  if(id == RETANGULO){
+    int base, altura;
+     
+  }
+  
+
+  
 }
 
 
